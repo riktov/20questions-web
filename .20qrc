@@ -1,0 +1,4 @@
+thingsdb=cgi_data/friend_names.txt
+questionsdb=cgi_data/friend_questions.txt
+css=css/20q.css
+#display_name=full

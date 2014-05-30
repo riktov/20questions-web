@@ -1,0 +1,50 @@
+#!/usr/bin/python
+
+import os
+import sys
+import re
+
+import cgi
+import cgitb
+
+import mod20q as tq
+
+rcfilename = '.' + re.sub('_.+py', 'rc', os.path.basename(sys.argv[0]))
+tq.configure(rcfilename)
+
+form = cgi.FieldStorage()
+thing_name = form.getvalue('name')
+ques = form.getvalue('q_id')
+
+#is_cgi = (thing_name != None)
+
+
+is_cgi = os.environ[GATEWAY_INTERFACE]
+
+#is_cgi = True
+
+if is_cgi:
+    print "Content-Type: text/html"
+    print
+    cgitb.enable()
+    cgi_url = os.path.basename(sys.argv[0])
+else:
+    print "running on command line"
+    print 
+    thing_name = sys.argv[1]
+    ques = sys.argv[2]
+
+#print "FOO"
+#sys.exit()
+
+things = tq.db_load_things(config.things_db_path)
+
+this_thing = tq.find_thing(thing_name, things)
+
+trail = tq.remove_response(tq.thing_trail(this_thing), ques)
+
+print trail
+tq.db_update_thing(thing_name, trail)
+
+if is_cgi:
+    print "<br/><a href=\"%s?%s\">Return</a>" % ('20q_edit.py', 'name=' + thing_name)
