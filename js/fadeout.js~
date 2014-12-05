@@ -1,0 +1,34 @@
+$(document).ready(function(){
+    //console.log('Readyman') ;
+
+    function disappear_in_sequence(elems) {
+        elems.first().animate(
+            {width: "0"},
+            70,
+            'swing', 
+            function() { 
+                this.remove();
+                disappear_in_sequence(elems.slice(1));
+            }
+        )
+    }
+
+    /////////////////////
+    // main
+    //$(".Eliminated").addClass('Animated');
+    //first trigger the CSS-based transition
+    $(".Changed").addClass('Animated').removeClass('Changed');
+
+    var num_elems = $('.Things').children().length ;
+    var side_len = Math.ceil(Math.sqrt(num_elems)) ;
+    
+    //console.log(side_len) ;
+    //$('.ThingsBlockContainer').css("width", side_len * 12).css("height", side_len * 12) ;
+    
+    var elems_to_eliminate = $($(".Eliminated").get().reverse()) ;
+    
+    //elems_to_eliminate.removeClass('Animated') ;
+    disappear_in_sequence(elems_to_eliminate) ;
+
+    //fadeout_and_disappear();
+});
